@@ -1,0 +1,33 @@
+baseURL = 'https://pallat.github.io/lognolog/'
+languageCode = 'en-us'
+title = 'Log No Log'
+layout = "list"
+
+theme = ["reveal-hugo"]
+
+[markup.goldmark.renderer]
+unsafe = true
+
+[outputFormats.Reveal]
+baseName = "index"
+mediaType = "text/html"
+isHTML = true
+
+[params.reveal_hugo]
+custom_theme = "reveal-hugo/themes/robot-lung.css"
+highlight_theme = "github"
+load_default_plugins = true
+
+[markup.highlight]
+codeFences = true
+
+[[params.reveal_hugo.plugins]]
+name = "RevealZoom"
+source = "reveal-js/plugin/zoom-js/zoom.js"
+
+[[params.reveal_hugo.plugins]]
+name = "RevealNotes"
+source = "reveal-js/plugin/notes/notes.js"
+
+[reveal_hugo.templates.white]
+transition = "zoom"
