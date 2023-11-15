@@ -172,6 +172,13 @@ TRACE: Fetching mailing list {"listid":14777}
 
 {{% /fragment %}}
 
+{{% fragment %}}
+or
+
+Unit Testing
+
+{{% /fragment %}}
+
 ---
 
 INFO
@@ -272,6 +279,14 @@ level=ERROR msg=context deadline exceeded
 
 {{% /fragment %}}
 
+{{% fragment %}}
+
+or
+
+add to metric
+
+{{% /fragment %}}
+
 ---
 
 ERROR
@@ -334,6 +349,16 @@ How about if it's ok but http status is 404
 
 Common Mistakes
 
+- Ignoring important logs (Error without log)
+- Use **Fatal** in libraries
+- Logging at the wrong level
+- Useless message
+- Sensitive Information
+
+---
+
+Common Mistakes
+
 {{% fragment %}}
 
 ```go
@@ -362,26 +387,6 @@ slog.Error("result failed")
 
 ```
 time=2023-11-14T21:41:20.632+07:00 level=ERROR source=handler.go:25 msg=result failed
-```
-
-{{% /fragment %}}
-
----
-
-Make it better
-
-{{% fragment %}}
-
-```go
-slog.Error("order not found", slog.String("id", id))
-```
-
-{{% /fragment %}}
-
-{{% fragment %}}
-
-```
-time=2023-11-14T21:41:20.632+07:00 level=ERROR source=handler.go:25 msg=order not found id=C10000043
 ```
 
 {{% /fragment %}}
@@ -432,14 +437,6 @@ https://www.bmc.com/blogs/monitoring-logging-tracing/
 
 ---
 
-consider
-
-- Who is using the logs
-- Costs
-- Logging Level
-
----
-
 Who cares about this kind of message?
 
 ```sh
@@ -469,4 +466,11 @@ Cloud Cost
 
 <https://cloud.google.com/blog/products/devops-sre/cloud-logging-cost-management-best-practices>
 
+1. Analyze your current spending on logging tools
+2. Eliminate waste — **don’t pay for logs you don’t need**
+3. Optimize costs over the lifecycle of your logs
+4. Setup alerts to avoid surprise bills
+
 ---
+
+Who needs it?
