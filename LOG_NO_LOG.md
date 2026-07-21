@@ -30,7 +30,7 @@ headerFont: "Roboto"
 
 # The Ship's Log
 
-<img src="https://raw.githubusercontent.com/DXHeroes/knowledge-base-content/master/files/ship_log.jpg" style="max-width:95%;max-height:95%;margin:15px 0;border:4px solid #363636;background:rgba(255,255,255,0.12);box-shadow:0 0 10px rgba(0,0,0,0.15);">
+<img src="https://raw.githubusercontent.com/DXHeroes/knowledge-base-content/master/files/ship_log.jpg" style="align-self:center;width:auto;height:auto;max-width:95%;max-height:95%;margin:15px 0;border:4px solid #363636;background:rgba(255,255,255,0.12);box-shadow:0 0 10px rgba(0,0,0,0.15);">
 
 ---
 background: "#ffffff"
@@ -46,7 +46,7 @@ color: "#363636"
 headerFont: "Roboto"
 ---
 
-<img src="https://www.l-tron.com/wp-content/uploads/2019/01/Crime-Scene-Documentation-iStock.jpg" style="max-width:95%;max-height:95%;margin:15px 0;border:4px solid #363636;background:rgba(255,255,255,0.12);box-shadow:0 0 10px rgba(0,0,0,0.15);">
+<img src="https://www.l-tron.com/wp-content/uploads/2019/01/Crime-Scene-Documentation-iStock.jpg" style="align-self:center;width:auto;height:auto;max-width:95%;max-height:95%;margin:15px 0;border:4px solid #363636;background:rgba(255,255,255,0.12);box-shadow:0 0 10px rgba(0,0,0,0.15);">
 
 ---
 background: "#ffffff"
@@ -64,7 +64,7 @@ headerFont: "Roboto"
 
 # Debug Logging Level
 
-<img src="debug-logging-level.svg" style="max-width:95%;max-height:95%;">
+<img src="/asset/debug-logging-level.svg" style="align-self:center;width:auto;height:auto;max-width:95%;max-height:95%;">
 
 ---
 background: "#ffffff"
@@ -95,6 +95,7 @@ headerFont: "Roboto"
 background: "#ffffff"
 color: "#363636"
 headerFont: "Roboto"
+fragments: true
 ---
 
 # Choose the Right Log Level
