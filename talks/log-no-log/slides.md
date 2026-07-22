@@ -1,7 +1,7 @@
 ---
 title: "Log No Log"
 author: "Pallat Anchaleechamaikorn"
-aspectRatio: "16:9"
+aspectRatio: "960:700"
 fonts:
   sans: "Roboto Slab"
 showControls: true
@@ -64,7 +64,7 @@ headerFont: "Roboto"
 
 # Debug Logging Level
 
-<img src="/asset/debug-logging-level.svg" style="align-self:center;width:auto;height:auto;max-width:95%;max-height:95%;">
+<img src="asset/debug-logging-level.svg" style="align-self:center;width:auto;height:auto;max-width:95%;max-height:95%;">
 
 ---
 background: "#ffffff"
@@ -122,34 +122,12 @@ FATAL: รุนแรงจนต้องระงับการทำงา�
 background: "#ffffff"
 color: "#363636"
 headerFont: "Roboto"
+fragments: true
 ---
 
 # DEBUG
 
-```mermaid
-%%{
-  init: {
-    'theme': 'base',
-    'themeVariables': {
-      'primaryColor': '#D99BAD',
-      'primaryTextColor': '#fff',
-      'primaryBorderColor': '#7C0000',
-      'lineColor': '#F8B229',
-      'secondaryColor': '#006100',
-      'tertiaryColor': '#fff'
-    }
-  }
-}%%
-
-graph RL
-    Trace --> Debug
-    Debug --> Info
-    Info --> Warn
-    Warn --> Error
-    Error --> Fatal
-
-    style Debug fill:#CE3262
-```
+<img src="asset/debug-level.svg" style="align-self:center;height:110px;width:auto;max-width:90%;margin:6px 0;">
 
 ```js
 console.log('==========');
@@ -163,48 +141,20 @@ console.log(err);
 DEBUG: Fetching mailing list {"listid":14777}
 ```
 
-or
+or `TRACE: Fetching mailing list {"listid":14777}`
 
-```js
-TRACE: Fetching mailing list {"listid":14777}
-```
-
-or
-
-Unit Testing
+or Unit Testing
 
 ---
 background: "#ffffff"
 color: "#363636"
 headerFont: "Roboto"
+fragments: true
 ---
 
 # INFO
 
-```mermaid
-%%{
-  init: {
-    'theme': 'base',
-    'themeVariables': {
-      'primaryColor': '#D99BAD',
-      'primaryTextColor': '#fff',
-      'primaryBorderColor': '#7C0000',
-      'lineColor': '#F8B229',
-      'secondaryColor': '#006100',
-      'tertiaryColor': '#fff'
-    }
-  }
-}%%
-
-graph RL
-    Trace --> Debug
-    Debug --> Info
-    Info --> Warn
-    Warn --> Error
-    Error --> Fatal
-
-    style Info fill:#CE3262
-```
+<img src="asset/info-level.svg" style="align-self:center;height:110px;width:auto;max-width:90%;margin:6px 0;">
 
 ```sh
 level=INFO msg=Connecting to the server...
@@ -218,34 +168,12 @@ level=INFO msg=No Content.
 background: "#ffffff"
 color: "#363636"
 headerFont: "Roboto"
+fragments: true
 ---
 
 # WARN
 
-```mermaid
-%%{
-  init: {
-    'theme': 'base',
-    'themeVariables': {
-      'primaryColor': '#D99BAD',
-      'primaryTextColor': '#fff',
-      'primaryBorderColor': '#7C0000',
-      'lineColor': '#F8B229',
-      'secondaryColor': '#006100',
-      'tertiaryColor': '#fff'
-    }
-  }
-}%%
-
-graph RL
-    Trace --> Debug
-    Debug --> Info
-    Info --> Warn
-    Warn --> Error
-    Error --> Fatal
-
-    style Warn fill:#CE3262
-```
+<img src="asset/warn-level.svg" style="align-self:center;height:110px;width:auto;max-width:90%;margin:6px 0;">
 
 ```sh
 level=WARN msg=WARNING WARNING WARNING
@@ -255,15 +183,26 @@ level=WARN msg=WARNING WARNING WARNING
 level=WARN msg=context deadline exceeded
 ```
 
-or
+or `level=ERROR msg=context deadline exceeded`
+
+or add to metric
+
+---
+background: "#ffffff"
+color: "#363636"
+headerFont: "Roboto"
+fragments: true
+---
+
+# ERROR
+
+<img src="asset/error-level.svg" style="align-self:center;height:110px;width:auto;max-width:90%;margin:6px 0;">
 
 ```sh
-level=ERROR msg=context deadline exceeded
+level=ERROR msg=Get "http://example.com/api": dial tcp: lookup example.co: no such host
 ```
 
-or
-
-add to metric
+How about if it's ok but http status is 404
 
 ---
 background: "#ffffff"
@@ -271,38 +210,7 @@ color: "#363636"
 headerFont: "Roboto"
 ---
 
-# ERROR
-
-```mermaid
-%%{
-  init: {
-    'theme': 'base',
-    'themeVariables': {
-      'primaryColor': '#D99BAD',
-      'primaryTextColor': '#fff',
-      'primaryBorderColor': '#7C0000',
-      'lineColor': '#F8B229',
-      'secondaryColor': '#006100',
-      'tertiaryColor': '#fff'
-    }
-  }
-}%%
-
-graph RL
-    Trace --> Debug
-    Debug --> Info
-    Info --> Warn
-    Warn --> Error
-    Error --> Fatal
-
-    style Error fill:#CE3262
-```
-
-```sh
-level=ERROR msg=Get "http://example.com/api": dial tcp: lookup example.co: no such host
-```
-
-How about if it's ok but http status is 404
+# ERROR: but the response itself says 404
 
 ```xml
 <?xml version="1.0" encoding="iso-8859-1"?>
@@ -337,6 +245,7 @@ headerFont: "Roboto"
 background: "#ffffff"
 color: "#363636"
 headerFont: "Roboto"
+fragments: true
 ---
 
 # Common Mistakes
@@ -429,14 +338,18 @@ level=INFO msg=PaymentService - Payment processed successfully for Order #12345
 background: "#ffffff"
 color: "#363636"
 headerFont: "Roboto"
+fragments: true
 ---
 
 # What's the log level in Production?
 
-<font color=red>**ERROR**</font>
-<font color=brown>**WARN**</font>
-<font color=blue>**INFO**</font>
-<font color=green>**DEBUG**</font>
+<strong style="color:red;">ERROR</strong>
+
+<strong style="color:brown;">WARN</strong>
+
+<strong style="color:blue;">INFO</strong>
+
+<strong style="color:green;">DEBUG</strong>
 
 ---
 background: "#ffffff"
