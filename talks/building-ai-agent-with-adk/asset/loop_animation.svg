@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="100%" height="100%">
+  <defs>
+    <style>
+      text { font-family: monospace; }
+      .box-session { fill: #1e293b; stroke: #38bdf8; stroke-width: 2; rx: 8; }
+      .box-agent { fill: #1e293b; stroke: #f472b6; stroke-width: 2; rx: 8; }
+      .packet { rx: 4; }
+      
+      @keyframes dashFlow { to { stroke-dashoffset: -16; } }
+
+      /* Loop Cycle */
+      @keyframes packetToAg {
+        0%, 5% { transform: translate(400px, 130px); opacity: 0; }
+        10% { transform: translate(400px, 130px); opacity: 1; }
+        35% { transform: translate(400px, 240px); opacity: 1; }
+        40%, 100% { transform: translate(400px, 240px); opacity: 0; }
+      }
+
+      @keyframes packetFromAg {
+        0%, 55% { transform: translate(400px, 240px); opacity: 0; }
+        60% { transform: translate(400px, 240px); opacity: 1; }
+        85% { transform: translate(400px, 130px); opacity: 1; }
+        90%, 100% { transform: translate(400px, 130px); opacity: 0; }
+      }
+
+      @keyframes blinkNode {
+        0%, 35% { filter: brightness(1); }
+        40%, 55% { filter: brightness(1.5); }
+        60%, 100% { filter: brightness(1); }
+      }
+
+      /* Iteration counter */
+      @keyframes iterCounter {
+        0%, 90% { opacity: 1; content: "Iter: 1"; }
+        100% { opacity: 1; content: "Iter: 2"; }
+      }
+
+      .anim-packet-to { animation: packetToAg 4s ease-in-out infinite; }
+      .anim-packet-from { animation: packetFromAg 4s ease-in-out infinite; }
+      .node-ag { animation: blinkNode 4s infinite; }
+      
+      /* Circular loop arrow */
+      .arrow-curve { stroke: #f472b6; stroke-width: 2; fill: none; stroke-dasharray: 8 8; animation: dashFlow 1s linear infinite; }
+      .arrow-line { stroke: #475569; stroke-width: 2; stroke-dasharray: 8 8; animation: dashFlow 1s linear infinite; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#475569" />
+    </marker>
+    <marker id="arrowhead-loop" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#f472b6" />
+    </marker>
+  </defs>
+
+  <rect width="100%" height="100%" fill="#0f172a" />
+
+  <!-- Paths -->
+  <path class="arrow-line" d="M 380 130 L 380 240" marker-end="url(#arrowhead)" />
+  <path class="arrow-line" d="M 420 240 L 420 130" marker-end="url(#arrowhead)" />
+  
+  <!-- Loop Arrow returning back from Agent to itself -->
+  <path class="arrow-curve" d="M 480 270 C 560 270, 560 210, 480 210" marker-end="url(#arrowhead-loop)" />
+
+  <!-- Session Box -->
+  <g transform="translate(320, 30)">
+    <rect class="box-session" width="160" height="100" />
+    <text x="80" y="55" fill="#f8fafc" font-size="16" text-anchor="middle" font-weight="bold">Session State</text>
+  </g>
+
+  <!-- Agent -->
+  <g class="node-ag" transform="translate(320, 240)">
+    <rect class="box-agent" width="160" height="60" />
+    <text x="80" y="25" fill="#f8fafc" font-size="14" text-anchor="middle" font-weight="bold">attemptAgent</text>
+    <text x="80" y="45" fill="#f472b6" font-size="12" text-anchor="middle">(Loop Iteration)</text>
+  </g>
+
+  <!-- Packets To -->
+  <g class="anim-packet-to">
+    <rect class="packet" fill="#3b82f6" width="30" height="16" x="-15" y="-8"/>
+    <text fill="#0f172a" font-size="9" text-anchor="middle" y="3" font-weight="bold">State</text>
+  </g>
+
+  <!-- Packets From -->
+  <g class="anim-packet-from">
+    <rect class="packet" fill="#f472b6" width="40" height="16" x="-20" y="-8"/>
+    <text fill="#0f172a" font-size="9" text-anchor="middle" y="3" font-weight="bold">Update</text>
+  </g>
+
+  <!-- Instruction Texts -->
+  <text x="400" y="350" fill="#e2e8f0" font-size="16" text-anchor="middle" font-weight="bold">LoopAgent</text>
+  <text x="400" y="375" fill="#94a3b8" font-size="14" text-anchor="middle">Repeats execution of sub-agents until MaxIterations or Escalate</text>
+</svg>

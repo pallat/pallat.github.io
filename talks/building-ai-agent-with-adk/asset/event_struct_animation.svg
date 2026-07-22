@@ -1,0 +1,132 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="100%" height="100%">
+  <defs>
+    <style>
+      text { font-family: monospace; }
+      .box-struct { fill: #0f172a; stroke: #64748b; stroke-width: 2; rx: 8; }
+      .box-tree { fill: #1e293b; stroke: #3b82f6; stroke-width: 2; rx: 4; }
+      .box-graph { fill: #1e293b; stroke: #10b981; stroke-width: 2; rx: 20; }
+      
+      .hl-branch { fill: #3b82f6; font-weight: bold; }
+      .hl-node { fill: #10b981; font-weight: bold; }
+      .hl-route { fill: #f59e0b; font-weight: bold; }
+
+      @keyframes dashFlowBranch { to { stroke-dashoffset: -16; } }
+      @keyframes dashFlowRoute { to { stroke-dashoffset: -16; } }
+
+      .path-branch { stroke: #3b82f6; stroke-width: 2; stroke-dasharray: 8 8; animation: dashFlowBranch 1s linear infinite; }
+      .path-graph { stroke: #10b981; stroke-width: 2; }
+      .path-route { stroke: #f59e0b; stroke-width: 3; stroke-dasharray: 8 8; animation: dashFlowRoute 1s linear infinite; }
+
+      @keyframes pulseNode {
+        0%, 100% { filter: drop-shadow(0 0 4px #10b981); stroke: #10b981; stroke-width: 2;}
+        50% { filter: drop-shadow(0 0 12px #10b981); stroke: #34d399; stroke-width: 3;}
+      }
+      
+      @keyframes pulseTree {
+        0%, 100% { filter: drop-shadow(0 0 4px #3b82f6); stroke: #3b82f6; stroke-width: 2; }
+        50% { filter: drop-shadow(0 0 12px #3b82f6); stroke: #60a5fa; stroke-width: 3; }
+      }
+
+      .active-node { animation: pulseNode 3s infinite; fill: #064e3b; }
+      .active-tree { animation: pulseTree 3s infinite; fill: #1e3a8a; }
+
+    </style>
+    <marker id="arrow-branch" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#3b82f6" />
+    </marker>
+    <marker id="arrow-graph" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#10b981" />
+    </marker>
+    <marker id="arrow-route" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#f59e0b" />
+    </marker>
+  </defs>
+
+  <rect width="100%" height="100%" fill="#0f172a" />
+
+  <!-- Center: Event Struct -->
+  <g transform="translate(260, 60)">
+    <rect class="box-struct" width="280" height="260" />
+    <text x="20" y="30" fill="#f8fafc" font-size="16" font-weight="bold">type Event struct {</text>
+    
+    <text x="40" y="60" fill="#94a3b8" font-size="12">ID           string</text>
+    <text x="40" y="80" fill="#94a3b8" font-size="12">InvocationID string</text>
+    
+    <rect x="35" y="105" width="220" height="24" fill="#1e3a8a" rx="4" opacity="0.6"/>
+    <text x="45" y="122" class="hl-branch" font-size="14">Branch: "mgr.worker"</text>
+    
+    <text x="40" y="150" fill="#94a3b8" font-size="12">Author       string</text>
+    <text x="40" y="170" fill="#94a3b8" font-size="12">Actions      EventActions</text>
+    
+    <rect x="35" y="185" width="220" height="24" fill="#064e3b" rx="4" opacity="0.6"/>
+    <text x="45" y="202" class="hl-node" font-size="14">NodeInfo: *NodeInfo</text>
+    
+    <rect x="35" y="215" width="220" height="24" fill="#78350f" rx="4" opacity="0.6"/>
+    <text x="45" y="232" class="hl-route" font-size="14">Routes: []string</text>
+    
+    <text x="20" y="250" fill="#f8fafc" font-size="16" font-weight="bold">}</text>
+  </g>
+
+  <!-- Left: Hierarchical Tree -->
+  <text x="120" y="40" fill="#f8fafc" font-size="16" text-anchor="middle" font-weight="bold">Hierarchical Tree</text>
+  <text x="120" y="60" fill="#94a3b8" font-size="12" text-anchor="middle">(Top-down Routing)</text>
+
+  <g transform="translate(40, 80)">
+    <!-- Root -->
+    <rect class="box-tree" x="40" y="0" width="80" height="40" />
+    <text x="80" y="25" fill="#f8fafc" font-size="14" text-anchor="middle">root</text>
+    
+    <path class="path-branch" d="M 80 40 L 80 80" marker-end="url(#arrow-branch)" />
+
+    <!-- Manager -->
+    <rect class="box-tree" x="40" y="80" width="80" height="40" />
+    <text x="80" y="105" fill="#f8fafc" font-size="14" text-anchor="middle">mgr</text>
+
+    <path class="path-branch" d="M 80 120 L 80 160" marker-end="url(#arrow-branch)" />
+
+    <!-- Worker (Active) -->
+    <rect class="box-tree active-tree" x="40" y="160" width="80" height="40" />
+    <text x="80" y="185" fill="#f8fafc" font-size="14" text-anchor="middle">worker</text>
+    
+    <!-- Link from Worker to Branch field -->
+    <path d="M 120 180 L 255 100" stroke="#3b82f6" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#arrow-branch)" />
+    <text x="190" y="125" fill="#60a5fa" font-size="11" text-anchor="middle" transform="rotate(-30, 190, 125)">Tracks Path</text>
+  </g>
+
+  <!-- Right: Graph Workflow -->
+  <text x="680" y="40" fill="#f8fafc" font-size="16" text-anchor="middle" font-weight="bold">Graph-based Workflow</text>
+  <text x="680" y="60" fill="#94a3b8" font-size="12" text-anchor="middle">(State Machine)</text>
+
+  <g transform="translate(560, 80)">
+    <!-- Start Node -->
+    <rect class="box-graph" x="80" y="0" width="80" height="40" />
+    <text x="120" y="25" fill="#f8fafc" font-size="14" text-anchor="middle">Start</text>
+    
+    <path class="path-graph" d="M 120 40 L 120 80" marker-end="url(#arrow-graph)" />
+
+    <!-- Analyze Node (Active) -->
+    <rect class="box-graph active-node" x="80" y="80" width="80" height="40" />
+    <text x="120" y="105" fill="#f8fafc" font-size="14" text-anchor="middle">Analyze</text>
+    
+    <!-- Link from Node to NodeInfo field -->
+    <path d="M 80 100 L -55 175" fill="none" stroke="#10b981" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#arrow-graph)" />
+    <text x="-5" y="125" fill="#34d399" font-size="11" text-anchor="middle" transform="rotate(35, -5, 125)">Current State</text>
+
+    <!-- Review Node -->
+    <rect class="box-graph" x="10" y="180" width="80" height="40" />
+    <text x="50" y="205" fill="#f8fafc" font-size="14" text-anchor="middle">Review</text>
+    
+    <path class="path-route" d="M 100 120 L 50 180" marker-end="url(#arrow-route)" />
+
+    <!-- Publish Node -->
+    <rect class="box-graph" x="150" y="180" width="80" height="40" />
+    <text x="190" y="205" fill="#f8fafc" font-size="14" text-anchor="middle">Publish</text>
+
+    <path class="path-route" d="M 140 120 L 190 180" marker-end="url(#arrow-route)" />
+    
+    <!-- Link from Routes field to Outgoing Edges -->
+    <path d="M -55 205 Q 10 190 75 145" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#arrow-route)" />
+    <text x="25" y="170" fill="#fcd34d" font-size="11" text-anchor="middle" transform="rotate(-30, 25, 170)">Drives Next Steps</text>
+  </g>
+
+</svg>

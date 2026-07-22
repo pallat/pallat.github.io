@@ -1,0 +1,129 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 5 500 420" width="100%" height="100%">
+  <defs>
+    <style>
+      text { font-family: monospace; }
+      .label-title { fill: #f8fafc; font-size: 14px; text-anchor: middle; font-weight: bold; }
+      .label-sub { fill: #94a3b8; font-size: 11px; text-anchor: middle; }
+      
+      .node-sys { fill: #1e293b; stroke: #94a3b8; stroke-width: 2; }
+      .node-llm { fill: #1e3a8a; stroke: #3b82f6; stroke-width: 2; rx: 8; filter: drop-shadow(0 0 4px rgba(59,130,246,0.3)); }
+      .node-custom { fill: #78350f; stroke: #f59e0b; stroke-width: 2; rx: 8; filter: drop-shadow(0 0 4px rgba(245,158,11,0.3)); }
+      .node-human { fill: #831843; stroke: #ec4899; stroke-width: 2; rx: 8; filter: drop-shadow(0 0 4px rgba(236,72,153,0.3)); }
+      .node-workflow { fill: #4c1d95; stroke: #a78bfa; stroke-width: 2; rx: 8; filter: drop-shadow(0 0 4px rgba(167,139,250,0.3)); }
+      .node-parallel { fill: #064e3b; stroke: #34d399; stroke-width: 2; rx: 8; filter: drop-shadow(0 0 4px rgba(52,211,153,0.3)); }
+      
+      .edge { fill: none; stroke: #475569; stroke-width: 2; }
+      .edge-flow { fill: none; stroke: #38bdf8; stroke-width: 2; stroke-dasharray: 6 6; animation: dash 1s linear infinite; }
+      .edge-flow-warn { fill: none; stroke: #ef4444; stroke-width: 2; stroke-dasharray: 6 6; animation: dash 1s linear infinite; }
+      .edge-flow-pass { fill: none; stroke: #10b981; stroke-width: 2; stroke-dasharray: 6 6; animation: dash 1s linear infinite; }
+
+      @keyframes dash { to { stroke-dashoffset: -12; } }
+      
+      .cond-box { fill: #0f172a; stroke: #334155; rx: 4; }
+      .cond-text { font-size: 11px; text-anchor: middle; font-weight: bold; }
+    </style>
+    
+    <marker id="arrow-def" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#475569" />
+    </marker>
+  </defs>
+
+  <rect width="100%" height="100%" fill="#0f172a" rx="12" />
+
+  <!-- Paths (Base & Animated Flow) -->
+  
+  <!-- Start to Branches -->
+  <path d="M 235 40 Q 100 50 100 90" class="edge" marker-end="url(#arrow-def)" />
+  <path d="M 265 40 Q 400 50 400 90" class="edge" marker-end="url(#arrow-def)" />
+  <path d="M 235 40 Q 100 50 100 90" class="edge-flow" />
+  <path d="M 265 40 Q 400 50 400 90" class="edge-flow" />
+
+  <!-- Branches to Analyze -->
+  <path d="M 100 130 Q 100 170 190 170" class="edge" marker-end="url(#arrow-def)" />
+  <path d="M 400 130 Q 400 170 310 170" class="edge" marker-end="url(#arrow-def)" />
+  <path d="M 100 130 Q 100 170 190 170" class="edge-flow" />
+  <path d="M 400 130 Q 400 170 310 170" class="edge-flow" />
+
+  <!-- Analyze to Review -->
+  <path d="M 250 210 L 250 260" class="edge" marker-end="url(#arrow-def)" />
+  <path d="M 250 210 L 250 260" class="edge-flow" />
+
+  <!-- Review to Human (Unsure) -->
+  <path d="M 310 280 L 360 280" class="edge" marker-end="url(#arrow-def)" />
+  <path d="M 310 280 L 360 280" class="edge-flow" />
+
+  <!-- Human back to Analyze -->
+  <path d="M 410 260 Q 410 190 310 190" class="edge" marker-end="url(#arrow-def)" />
+  <path d="M 410 260 Q 410 190 310 190" class="edge-flow" />
+
+  <!-- Review to Research (Fail Loop) -->
+  <path d="M 190 280 C 10 280, 10 110, 40 110" class="edge" marker-end="url(#arrow-def)" />
+  <path d="M 190 280 C 10 280, 10 110, 40 110" class="edge-flow-warn" />
+
+  <!-- Review to End (Pass) -->
+  <path d="M 250 300 L 250 385" class="edge" marker-end="url(#arrow-def)" />
+  <path d="M 250 300 L 250 385" class="edge-flow-pass" />
+
+  <!-- Conditions Labels -->
+  <!-- Fork -->
+  <text x="140" y="65" fill="#94a3b8" font-size="10">Fork</text>
+  <text x="360" y="65" fill="#94a3b8" font-size="10">Fork</text>
+
+  <!-- Join -->
+  <text x="150" y="160" fill="#94a3b8" font-size="10">Join</text>
+  <text x="350" y="160" fill="#94a3b8" font-size="10">Join</text>
+
+  <!-- Custom Routes -->
+  <g transform="translate(60, 195)">
+    <rect class="cond-box" width="50" height="20" rx="4" />
+    <text x="25" y="14" class="cond-text" fill="#ef4444">if Fail</text>
+  </g>
+  <g transform="translate(325, 290)">
+    <rect class="cond-box" width="65" height="20" rx="4" />
+    <text x="32" y="14" class="cond-text" fill="#f59e0b">if Unsure</text>
+  </g>
+  <g transform="translate(255, 340)">
+    <rect class="cond-box" width="55" height="20" rx="4" />
+    <text x="27" y="14" class="cond-text" fill="#10b981">if Pass</text>
+  </g>
+  <g transform="translate(385, 215)">
+    <rect class="cond-box" width="60" height="20" rx="4" />
+    <text x="30" y="14" class="cond-text" fill="#ec4899">Resume</text>
+  </g>
+
+  <!-- Nodes -->
+  
+  <!-- Start -->
+  <ellipse cx="250" cy="30" rx="30" ry="15" class="node-sys" />
+  <text x="250" y="34" class="label-title" font-size="12">Start</text>
+
+  <!-- Research (Workflow Agent) -->
+  <rect x="40" y="90" width="120" height="40" class="node-workflow" />
+  <text x="100" y="109" class="label-title">Research</text>
+  <text x="100" y="122" class="label-sub">(Sequential Agent)</text>
+
+  <!-- Data (Parallel Agent) -->
+  <rect x="340" y="90" width="120" height="40" class="node-parallel" />
+  <text x="400" y="109" class="label-title">Fetch Data</text>
+  <text x="400" y="122" class="label-sub">(Parallel Agent)</text>
+
+  <!-- Analyze (LLM) -->
+  <rect x="190" y="170" width="120" height="40" class="node-llm" />
+  <text x="250" y="189" class="label-title">Analyze</text>
+  <text x="250" y="202" class="label-sub">(LLM Agent)</text>
+
+  <!-- Review (Custom) -->
+  <rect x="190" y="260" width="120" height="40" class="node-custom" />
+  <text x="250" y="279" class="label-title">Review</text>
+  <text x="250" y="292" class="label-sub">(Custom Agent)</text>
+
+  <!-- Human Input -->
+  <rect x="360" y="260" width="100" height="40" class="node-human" />
+  <text x="410" y="279" class="label-title">Human</text>
+  <text x="410" y="292" class="label-sub">(Input Node)</text>
+
+  <!-- End -->
+  <ellipse cx="250" cy="400" rx="30" ry="15" class="node-sys" />
+  <text x="250" y="404" class="label-title" font-size="12">End</text>
+
+</svg>

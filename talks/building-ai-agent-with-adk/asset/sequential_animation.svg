@@ -1,0 +1,168 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="100%" height="100%">
+  <defs>
+    <style>
+      /* General Styles */
+      text { font-family: monospace; }
+      .box-session { fill: #1e293b; stroke: #38bdf8; stroke-width: 2; rx: 8; }
+      .box-agent1 { fill: #1e293b; stroke: #f472b6; stroke-width: 2; rx: 8; }
+      .box-agent2 { fill: #1e293b; stroke: #a855f7; stroke-width: 2; rx: 8; }
+      
+      /* Data Packets */
+      .packet { rx: 4; }
+      
+      /* Animations */
+      @keyframes dashFlow {
+        to { stroke-dashoffset: -16; }
+      }
+
+      /* Step 1: Context -> Agent 1 */
+      @keyframes packetToAg1 {
+        0%, 5% { transform: translate(370px, 130px); opacity: 0; }
+        10% { transform: translate(370px, 130px); opacity: 1; }
+        20% { transform: translate(250px, 240px); opacity: 1; }
+        25%, 100% { transform: translate(250px, 240px); opacity: 0; }
+      }
+
+      /* Step 2: Agent 1 -> Context (Draft Event) */
+      @keyframes packetFromAg1 {
+        0%, 25% { transform: translate(250px, 240px); opacity: 0; }
+        30% { transform: translate(250px, 240px); opacity: 1; }
+        40% { transform: translate(370px, 130px); opacity: 1; }
+        45%, 100% { transform: translate(370px, 130px); opacity: 0; }
+      }
+
+      /* Step 3: Context -> Agent 2 (Read Draft) */
+      @keyframes packetToAg2 {
+        0%, 45% { transform: translate(430px, 130px); opacity: 0; }
+        50% { transform: translate(430px, 130px); opacity: 1; }
+        60% { transform: translate(550px, 240px); opacity: 1; }
+        65%, 100% { transform: translate(550px, 240px); opacity: 0; }
+      }
+
+      /* Step 4: Agent 2 -> Context (Review Event) */
+      @keyframes packetFromAg2 {
+        0%, 65% { transform: translate(550px, 240px); opacity: 0; }
+        70% { transform: translate(550px, 240px); opacity: 1; }
+        80% { transform: translate(430px, 130px); opacity: 1; }
+        85%, 100% { transform: translate(430px, 130px); opacity: 0; }
+      }
+
+      /* Event items appearing in Session */
+      @keyframes showDraftEvent {
+        0%, 40% { opacity: 0; }
+        45%, 100% { opacity: 1; }
+      }
+      @keyframes showReviewEvent {
+        0%, 80% { opacity: 0; }
+        85%, 100% { opacity: 1; }
+      }
+
+      /* Blinking Nodes */
+      @keyframes blinkAg1 {
+        0%, 15% { filter: brightness(1); }
+        20%, 30% { filter: brightness(1.5); }
+        35%, 100% { filter: brightness(1); }
+      }
+      @keyframes blinkAg2 {
+        0%, 55% { filter: brightness(1); }
+        60%, 70% { filter: brightness(1.5); }
+        75%, 100% { filter: brightness(1); }
+      }
+      @keyframes blinkSession {
+        0%, 40% { filter: brightness(1); }
+        45%, 50% { filter: brightness(1.3); }
+        80%, 85% { filter: brightness(1.3); }
+        90%, 100% { filter: brightness(1); }
+      }
+
+      /* Apply Animations */
+      .anim-packet-to-1 { animation: packetToAg1 10s ease-in-out infinite; }
+      .anim-packet-from-1 { animation: packetFromAg1 10s ease-in-out infinite; }
+      .anim-packet-to-2 { animation: packetToAg2 10s ease-in-out infinite; }
+      .anim-packet-from-2 { animation: packetFromAg2 10s ease-in-out infinite; }
+      
+      .event-draft { animation: showDraftEvent 10s infinite; }
+      .event-review { animation: showReviewEvent 10s infinite; }
+
+      .node-ag1 { animation: blinkAg1 10s infinite; }
+      .node-ag2 { animation: blinkAg2 10s infinite; }
+      .node-session { animation: blinkSession 10s infinite; }
+      
+      /* Arrows */
+      .arrow-line { stroke: #475569; stroke-width: 2; stroke-dasharray: 8 8; animation: dashFlow 1s linear infinite; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#475569" />
+    </marker>
+  </defs>
+
+  <!-- Background for visibility in preview -->
+  <rect width="100%" height="100%" fill="#0f172a" />
+
+  <!-- Paths / Arrows -->
+  <path class="arrow-line" d="M 370 130 L 250 240" marker-end="url(#arrowhead)" />
+  <path class="arrow-line" d="M 250 240 L 370 130" marker-end="url(#arrowhead)" />
+
+  <path class="arrow-line" d="M 430 130 L 550 240" marker-end="url(#arrowhead)" />
+  <path class="arrow-line" d="M 550 240 L 430 130" marker-end="url(#arrowhead)" />
+
+  <!-- Nodes -->
+  <!-- Session Context Box -->
+  <g class="node-session" transform="translate(320, 30)">
+    <rect class="box-session" width="160" height="100" />
+    <text x="80" y="25" fill="#f8fafc" font-size="16" text-anchor="middle" font-weight="bold">Session State</text>
+    <text x="80" y="40" fill="#94a3b8" font-size="10" text-anchor="middle">Shared Context</text>
+    
+    <!-- Stored Events appearing -->
+    <g class="event-draft" transform="translate(15, 50)">
+      <rect width="130" height="18" fill="#1e293b" stroke="#f472b6" stroke-width="1" rx="4" />
+      <text x="65" y="13" fill="#cbd5e1" font-size="10" text-anchor="middle">+ Event: Draft</text>
+    </g>
+    <g class="event-review" transform="translate(15, 72)">
+      <rect width="130" height="18" fill="#1e293b" stroke="#a855f7" stroke-width="1" rx="4" />
+      <text x="65" y="13" fill="#cbd5e1" font-size="10" text-anchor="middle">+ Event: Review</text>
+    </g>
+  </g>
+
+  <!-- Agent 1 Box -->
+  <g class="node-ag1" transform="translate(140, 240)">
+    <rect class="box-agent1" width="160" height="60" />
+    <text x="80" y="25" fill="#f8fafc" font-size="14" text-anchor="middle" font-weight="bold">Agent 1</text>
+    <text x="80" y="45" fill="#f472b6" font-size="12" text-anchor="middle">draft_agent</text>
+  </g>
+
+  <!-- Agent 2 Box -->
+  <g class="node-ag2" transform="translate(500, 240)">
+    <rect class="box-agent2" width="160" height="60" />
+    <text x="80" y="25" fill="#f8fafc" font-size="14" text-anchor="middle" font-weight="bold">Agent 2</text>
+    <text x="80" y="45" fill="#a855f7" font-size="12" text-anchor="middle">review_agent</text>
+  </g>
+
+
+  <!-- Data Packets for animation -->
+  <g class="anim-packet-to-1">
+    <rect class="packet" fill="#3b82f6" width="30" height="16" x="-15" y="-8"/>
+    <text fill="#0f172a" font-size="9" text-anchor="middle" y="3" font-weight="bold">Start</text>
+  </g>
+
+  <g class="anim-packet-from-1">
+    <rect class="packet" fill="#f472b6" width="50" height="16" x="-25" y="-8"/>
+    <text fill="#0f172a" font-size="9" text-anchor="middle" y="3" font-weight="bold">Add Draft</text>
+  </g>
+
+  <g class="anim-packet-to-2">
+    <rect class="packet" fill="#3b82f6" width="60" height="16" x="-30" y="-8"/>
+    <text fill="#0f172a" font-size="9" text-anchor="middle" y="3" font-weight="bold">Read Draft</text>
+  </g>
+
+  <g class="anim-packet-from-2">
+    <rect class="packet" fill="#a855f7" width="55" height="16" x="-27.5" y="-8"/>
+    <text fill="#0f172a" font-size="9" text-anchor="middle" y="3" font-weight="bold">Add Review</text>
+  </g>
+
+
+  <!-- Instruction Texts -->
+  <text x="400" y="350" fill="#e2e8f0" font-size="16" text-anchor="middle" font-weight="bold">SequentialAgent Pipeline</text>
+  <text x="400" y="375" fill="#94a3b8" font-size="14" text-anchor="middle">1. Agent 1 computes ➔ 2. Writes to Session ➔ 3. Agent 2 reads Session ➔ 4. Writes to Session</text>
+
+</svg>

@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="100%" height="100%">
+  <defs>
+    <style>
+      text { font-family: monospace; }
+      .box-session { fill: #1e293b; stroke: #38bdf8; stroke-width: 2; rx: 8; }
+      .box-agent { fill: #1e293b; stroke: #f472b6; stroke-width: 2; rx: 8; }
+      .packet { rx: 4; }
+      
+      @keyframes dashFlow { to { stroke-dashoffset: -16; } }
+
+      /* Broadcast (Session to Agents) */
+      @keyframes packetToAg {
+        0%, 5% { transform: translate(380px, 130px); opacity: 0; }
+        10% { transform: translate(380px, 130px); opacity: 1; }
+        35% { transform: var(--target); opacity: 1; }
+        40%, 100% { transform: var(--target); opacity: 0; }
+      }
+
+      /* Results (Agents to Session) */
+      @keyframes packetFromAg {
+        0%, 55% { transform: var(--start); opacity: 0; }
+        60% { transform: var(--start); opacity: 1; }
+        85% { transform: translate(380px, 130px); opacity: 1; }
+        90%, 100% { transform: translate(380px, 130px); opacity: 0; }
+      }
+
+      @keyframes blinkNode {
+        0%, 35% { filter: brightness(1); }
+        40%, 55% { filter: brightness(1.5); }
+        60%, 100% { filter: brightness(1); }
+      }
+
+      /* Apply */
+      .anim-packet-to { animation: packetToAg 6s ease-in-out infinite; }
+      .anim-packet-from { animation: packetFromAg 6s ease-in-out infinite; }
+      .node-ag { animation: blinkNode 6s infinite; }
+      .arrow-line { stroke: #475569; stroke-width: 2; stroke-dasharray: 8 8; animation: dashFlow 1s linear infinite; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#475569" />
+    </marker>
+  </defs>
+
+  <rect width="100%" height="100%" fill="#0f172a" />
+
+  <!-- Paths -->
+  <!-- Session -> Agents -->
+  <path class="arrow-line" d="M 380 130 L 160 240" marker-end="url(#arrowhead)" />
+  <path class="arrow-line" d="M 400 130 L 400 240" marker-end="url(#arrowhead)" />
+  <path class="arrow-line" d="M 420 130 L 640 240" marker-end="url(#arrowhead)" />
+
+  <!-- Session Box -->
+  <g transform="translate(320, 30)">
+    <rect class="box-session" width="160" height="100" />
+    <text x="80" y="55" fill="#f8fafc" font-size="16" text-anchor="middle" font-weight="bold">Session State</text>
+  </g>
+
+  <!-- Agents -->
+  <g class="node-ag" transform="translate(100, 240)">
+    <rect class="box-agent" width="120" height="60" />
+    <text x="60" y="35" fill="#f8fafc" font-size="14" text-anchor="middle" font-weight="bold">fetchDocs</text>
+  </g>
+  <g class="node-ag" transform="translate(340, 240)">
+    <rect class="box-agent" stroke="#a855f7" width="120" height="60" />
+    <text x="60" y="35" fill="#f8fafc" font-size="14" text-anchor="middle" font-weight="bold">fetchTickets</text>
+  </g>
+  <g class="node-ag" transform="translate(580, 240)">
+    <rect class="box-agent" stroke="#4ade80" width="120" height="60" />
+    <text x="60" y="35" fill="#f8fafc" font-size="14" text-anchor="middle" font-weight="bold">fetchLogs</text>
+  </g>
+
+  <!-- Packets To -->
+  <g class="anim-packet-to" style="--target: translate(160px, 240px);">
+    <rect class="packet" fill="#3b82f6" width="20" height="20" x="-10" y="-10"/>
+  </g>
+  <g class="anim-packet-to" style="--target: translate(400px, 240px);">
+    <rect class="packet" fill="#3b82f6" width="20" height="20" x="-10" y="-10"/>
+  </g>
+  <g class="anim-packet-to" style="--target: translate(640px, 240px);">
+    <rect class="packet" fill="#3b82f6" width="20" height="20" x="-10" y="-10"/>
+  </g>
+
+  <!-- Packets From -->
+  <g class="anim-packet-from" style="--start: translate(160px, 240px);">
+    <rect class="packet" fill="#f472b6" width="30" height="20" x="-15" y="-10"/>
+    <text fill="#0f172a" font-size="10" text-anchor="middle" y="3" font-weight="bold">Res</text>
+  </g>
+  <g class="anim-packet-from" style="--start: translate(400px, 240px);">
+    <rect class="packet" fill="#a855f7" width="30" height="20" x="-15" y="-10"/>
+    <text fill="#0f172a" font-size="10" text-anchor="middle" y="3" font-weight="bold">Res</text>
+  </g>
+  <g class="anim-packet-from" style="--start: translate(640px, 240px);">
+    <rect class="packet" fill="#4ade80" width="30" height="20" x="-15" y="-10"/>
+    <text fill="#0f172a" font-size="10" text-anchor="middle" y="3" font-weight="bold">Res</text>
+  </g>
+
+  <!-- Instruction Texts -->
+  <text x="400" y="350" fill="#e2e8f0" font-size="16" text-anchor="middle" font-weight="bold">ParallelAgent Pipeline</text>
+  <text x="400" y="375" fill="#94a3b8" font-size="14" text-anchor="middle">All Sub-Agents receive events simultaneously and run concurrently.</text>
+</svg>

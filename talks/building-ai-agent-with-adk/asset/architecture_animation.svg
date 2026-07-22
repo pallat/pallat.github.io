@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 40 800 390" width="100%" height="100%">
+  <defs>
+    <style>
+      text { font-family: monospace; }
+      .box-core { fill: #1e293b; stroke: #3b82f6; stroke-width: 2; rx: 12; }
+      .box-feature { fill: #0f172a; stroke: #64748b; stroke-width: 2; rx: 8; stroke-dasharray: 4 4; }
+      
+      @keyframes dashFlowOut { to { stroke-dashoffset: -16; } }
+      @keyframes dashFlowIn { to { stroke-dashoffset: 16; } }
+
+      /* Pulse effect for core */
+      @keyframes pulseCore {
+        0%, 100% { filter: drop-shadow(0 0 6px rgba(59, 130, 246, 0.4)); }
+        50% { filter: drop-shadow(0 0 16px rgba(59, 130, 246, 0.8)); }
+      }
+      
+      /* Packet animations - Slowed down and safer keyframes */
+      @keyframes packetMCP {
+        0%, 15% { opacity: 0; transform: translate(480px, 180px) rotate(-26deg); }
+        20% { opacity: 1; transform: translate(480px, 180px) rotate(-26deg); }
+        40% { opacity: 1; transform: translate(590px, 126px) rotate(-26deg); }
+        45%, 100% { opacity: 0; transform: translate(590px, 126px) rotate(-26deg); }
+      }
+
+      @keyframes packetMCPIn {
+        50%, 65% { opacity: 0; transform: translate(590px, 126px) rotate(-26deg); }
+        70% { opacity: 1; transform: translate(590px, 126px) rotate(-26deg); }
+        90% { opacity: 1; transform: translate(480px, 180px) rotate(-26deg); }
+        95%, 100% { opacity: 0; transform: translate(480px, 180px) rotate(-26deg); }
+      }
+
+      @keyframes packetAgentL {
+        0%, 25% { opacity: 0; transform: translate(380px, 240px) rotate(40deg); }
+        30% { opacity: 1; transform: translate(380px, 240px) rotate(40deg); }
+        60% { opacity: 1; transform: translate(310px, 300px) rotate(40deg); }
+        65%, 100% { opacity: 0; transform: translate(310px, 300px) rotate(40deg); }
+      }
+
+      @keyframes packetAgentR {
+        15%, 40% { opacity: 0; transform: translate(420px, 240px) rotate(-40deg); }
+        45% { opacity: 1; transform: translate(420px, 240px) rotate(-40deg); }
+        75% { opacity: 1; transform: translate(490px, 300px) rotate(-40deg); }
+        80%, 100% { opacity: 0; transform: translate(490px, 300px) rotate(-40deg); }
+      }
+
+      @keyframes packetEvent {
+        0% { transform: rotate(0deg) translateX(35px) rotate(0deg); }
+        100% { transform: rotate(360deg) translateX(35px) rotate(-360deg); }
+      }
+
+      .core { animation: pulseCore 4s infinite ease-in-out; }
+      .line-out { stroke: #3b82f6; stroke-width: 2; stroke-dasharray: 8 8; animation: dashFlowOut 1.5s linear infinite; }
+      .line-in { stroke: #10b981; stroke-width: 2; stroke-dasharray: 8 8; animation: dashFlowIn 1.5s linear infinite; }
+      .line-loop { stroke: #f59e0b; stroke-width: 2; stroke-dasharray: 8 8; animation: dashFlowIn 2s linear infinite; fill: none; }
+      
+      /* Reduced speed for all packets */
+      .anim-packet-mcp { animation: packetMCP 6s ease-in-out infinite; }
+      .anim-packet-mcp-in { animation: packetMCPIn 6s ease-in-out infinite; }
+      .anim-packet-agent-l { animation: packetAgentL 6s ease-in-out infinite; }
+      .anim-packet-agent-r { animation: packetAgentR 6s ease-in-out infinite; }
+    </style>
+  </defs>
+
+  <rect width="100%" height="100%" fill="#0f172a" />
+
+  <!-- Connecting Lines -->
+  <!-- Center to Top-Left (Event) -->
+  <line class="line-out" x1="320" y1="180" x2="210" y2="130" />
+  
+  <!-- Center to Top-Right (MCP) -->
+  <line class="line-out" x1="480" y1="180" x2="600" y2="120" />
+  
+  <!-- Center to Bottom-Left (Agent Tree) -->
+  <line class="line-out" x1="380" y1="240" x2="300" y2="310" />
+  
+  <!-- Center to Bottom-Right (Agent Tree) -->
+  <line class="line-out" x1="420" y1="240" x2="500" y2="310" />
+
+
+  <!-- 1. Event-Driven (Top Left) -->
+  <g transform="translate(60, 60)">
+    <circle cx="100" cy="50" r="35" class="line-loop" />
+    <g style="animation: packetEvent 2.5s linear infinite; transform-origin: 100px 50px;">
+      <circle cx="100" cy="50" r="6" fill="#f59e0b" />
+    </g>
+    <rect class="box-feature" x="30" y="105" width="140" height="45" />
+    <text x="100" y="122" fill="#f59e0b" font-size="14" text-anchor="middle" font-weight="bold">1. Event-Driven</text>
+    <text x="100" y="140" fill="#94a3b8" font-size="10" text-anchor="middle">ask-yield loop</text>
+  </g>
+
+  <!-- 2. MCP Native (Top Right) -->
+  <g transform="translate(560, 60)">
+    <rect class="box-feature" width="180" height="80" />
+    <text x="90" y="25" fill="#10b981" font-size="14" text-anchor="middle" font-weight="bold">2. MCP Native</text>
+    <text x="90" y="45" fill="#94a3b8" font-size="10" text-anchor="middle">External Tools / Context</text>
+    
+    <!-- Server icon -->
+    <rect x="75" y="55" width="30" height="15" fill="#334155" rx="2" />
+    <line x1="80" y1="62.5" x2="100" y2="62.5" stroke="#10b981" stroke-width="2" />
+  </g>
+
+  <!-- 3. Multi-Agent Native (Bottom) -->
+  <g transform="translate(240, 310)">
+    <!-- Sub-agent L -->
+    <rect class="box-feature" x="0" y="0" width="120" height="60" />
+    <text x="60" y="25" fill="#c084fc" font-size="12" text-anchor="middle" font-weight="bold">Sub-Agent</text>
+    <text x="60" y="45" fill="#94a3b8" font-size="10" text-anchor="middle">Delegate</text>
+
+    <!-- Sub-agent R -->
+    <rect class="box-feature" x="200" y="0" width="120" height="60" />
+    <text x="260" y="25" fill="#c084fc" font-size="12" text-anchor="middle" font-weight="bold">Sub-Agent</text>
+    <text x="260" y="45" fill="#94a3b8" font-size="10" text-anchor="middle">Delegate</text>
+    
+    <text x="160" y="90" fill="#c084fc" font-size="16" text-anchor="middle" font-weight="bold">3. Multi-Agent Native</text>
+    <text x="160" y="110" fill="#94a3b8" font-size="12" text-anchor="middle">Hierarchical Tree</text>
+  </g>
+
+  <!-- Center Hub: ADK Engine -->
+  <g class="core" transform="translate(280, 140)">
+    <rect class="box-core" width="240" height="100" />
+    <text x="120" y="40" fill="#f8fafc" font-size="22" text-anchor="middle" font-weight="bold">ADK Runtime</text>
+    <text x="120" y="65" fill="#3b82f6" font-size="14" text-anchor="middle">(Session / Runner)</text>
+    <text x="120" y="85" fill="#94a3b8" font-size="12" text-anchor="middle">Built-in Infrastructure</text>
+  </g>
+
+  <!-- Packets flying -->
+  <!-- Start off invisible and at the correct starting position to prevent flashing at 0,0 -->
+  <g class="anim-packet-mcp" transform="translate(480, 180) rotate(-26)" opacity="0">
+    <rect fill="#10b981" width="34" height="14" rx="4" x="-17" y="-7"/>
+    <text x="0" y="3" fill="#0f172a" font-size="10" text-anchor="middle" font-weight="bold">RPC</text>
+  </g>
+  <g class="anim-packet-mcp-in" transform="translate(590, 126) rotate(-26)" opacity="0">
+    <rect fill="#3b82f6" width="34" height="14" rx="4" x="-17" y="-7"/>
+    <text x="0" y="3" fill="#0f172a" font-size="10" text-anchor="middle" font-weight="bold">Res</text>
+  </g>
+  
+  <g class="anim-packet-agent-l" transform="translate(380, 240) rotate(40)" opacity="0">
+    <rect fill="#c084fc" width="34" height="14" rx="4" x="-17" y="-7"/>
+    <text x="0" y="3" fill="#0f172a" font-size="10" text-anchor="middle" font-weight="bold">Call</text>
+  </g>
+  <g class="anim-packet-agent-r" transform="translate(420, 240) rotate(-40)" opacity="0">
+    <rect fill="#c084fc" width="34" height="14" rx="4" x="-17" y="-7"/>
+    <text x="0" y="3" fill="#0f172a" font-size="10" text-anchor="middle" font-weight="bold">Call</text>
+  </g>
+
+</svg>

@@ -1,0 +1,147 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 440" width="100%" height="100%">
+  <defs>
+    <style>
+      text { font-family: monospace; }
+      .box-container { fill: #1e293b; stroke: #334155; stroke-width: 2; rx: 12; }
+      .text-code { fill: #f8fafc; font-size: 13px; }
+      .text-comment { fill: #64748b; font-size: 11px; }
+      
+      .arrow { fill: none; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 150; }
+      .arrow-call { stroke: #60a5fa; }
+      .arrow-ret { stroke: #a78bfa; }
+      
+      /* Timeline highlights (10s cycle) */
+      .hl-rect { rx: 4; opacity: 0; }
+      
+      @keyframes hl-iter-loop {
+        0%, 10%, 90%, 100% { opacity: 0.2; }
+        11%, 89% { opacity: 0; }
+      }
+      @keyframes hl-iter-create {
+        12%, 25% { opacity: 0.2; }
+        0%, 11%, 26%, 100% { opacity: 0; }
+      }
+      @keyframes hl-iter-call {
+        26%, 35%, 85%, 95% { opacity: 0.3; }
+        0%, 25%, 36%, 84%, 96%, 100% { opacity: 0; }
+      }
+      @keyframes hl-yield-entry {
+        45%, 55% { opacity: 0.2; }
+        0%, 44%, 56%, 100% { opacity: 0; }
+      }
+      @keyframes hl-yield-body {
+        56%, 70% { opacity: 0.2; }
+        0%, 55%, 71%, 100% { opacity: 0; }
+      }
+      @keyframes hl-yield-ret {
+        71%, 80% { opacity: 0.3; }
+        0%, 70%, 81%, 100% { opacity: 0; }
+      }
+      
+      /* Arrows flowing */
+      @keyframes anim-flow-call {
+        0%, 30% { stroke-dashoffset: 150; opacity: 0; }
+        31% { stroke-dashoffset: 150; opacity: 1; }
+        44% { stroke-dashoffset: 0; opacity: 1; }
+        45%, 100% { opacity: 0; }
+      }
+      @keyframes anim-flow-ret {
+        0%, 75% { stroke-dashoffset: 150; opacity: 0; }
+        76% { stroke-dashoffset: 150; opacity: 1; }
+        89% { stroke-dashoffset: 0; opacity: 1; }
+        90%, 100% { opacity: 0; }
+      }
+
+      .run-hl-iter-loop { fill: #3b82f6; animation: hl-iter-loop 10s infinite; }
+      .run-hl-iter-create { fill: #3b82f6; animation: hl-iter-create 10s infinite; }
+      .run-hl-iter-call { fill: #3b82f6; animation: hl-iter-call 10s infinite; }
+      .run-hl-yield-entry { fill: #8b5cf6; animation: hl-yield-entry 10s infinite; }
+      .run-hl-yield-body { fill: #8b5cf6; animation: hl-yield-body 10s infinite; }
+      .run-hl-yield-ret { fill: #8b5cf6; animation: hl-yield-ret 10s infinite; }
+      
+      .run-flow-call { animation: anim-flow-call 10s infinite linear; }
+      .run-flow-ret { animation: anim-flow-ret 10s infinite linear; }
+    </style>
+
+    <marker id="arrowhead-blue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#60a5fa" />
+    </marker>
+    <marker id="arrowhead-purple" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#a78bfa" />
+    </marker>
+  </defs>
+
+  <rect width="100%" height="100%" fill="#0f172a" />
+
+  <!-- 1. Iterator Box (Left) -->
+  <g transform="translate(40, 40)">
+    <rect class="box-container" width="330" height="340" />
+    <text x="20" y="30" fill="#60a5fa" font-size="15" font-weight="bold">1. Iterator (runGreeting)</text>
+    <text x="20" y="50" fill="#64748b" font-size="11">Runs on caller's thread (same stack)</text>
+    
+    <!-- Code Highlight Rects -->
+    <rect class="hl-rect run-hl-iter-loop" x="15" y="103" width="300" height="20" />
+    <rect class="hl-rect run-hl-iter-create" x="15" y="125" width="300" height="20" />
+    <rect class="hl-rect run-hl-iter-call" x="15" y="147" width="300" height="20" />
+    
+    <!-- Code Text -->
+    <g xml:space="preserve">
+      <text class="text-code" x="20" y="90" fill="#3b82f6">return func(yield func(E, error) bool) {</text>
+      <text class="text-code" x="20" y="117">  for _, text := range steps {</text>
+      <text class="text-code" x="20" y="139">    event := NewEvent(text)</text>
+      <text class="text-code" x="20" y="161" fill="#f59e0b" font-weight="bold">    if !yield(event, nil) {</text>
+      <text class="text-code" x="20" y="183">      return // cancel/break</text>
+      <text class="text-code" x="20" y="205">    }</text>
+      <text class="text-code" x="20" y="227">  }</text>
+      <text class="text-code" x="20" y="249" fill="#3b82f6">}</text>
+    </g>
+  </g>
+
+  <!-- 2. Yield Box (Right) -->
+  <g transform="translate(430, 40)">
+    <rect class="box-container" width="330" height="340" />
+    <text x="20" y="30" fill="#a78bfa" font-size="15" font-weight="bold">2. Yield Callback (Loop Body)</text>
+    <text x="20" y="50" fill="#64748b" font-size="11">Generated dynamically by Go compiler</text>
+    
+    <!-- Code Highlight Rects -->
+    <rect class="hl-rect run-hl-yield-entry" x="15" y="81" width="300" height="20" />
+    <rect class="hl-rect run-hl-yield-body" x="15" y="103" width="300" height="20" />
+    <rect class="hl-rect run-hl-yield-ret" x="15" y="191" width="300" height="20" />
+    
+    <!-- Code Text -->
+    <g xml:space="preserve">
+      <text class="text-code" x="20" y="95" fill="#a78bfa">func(event *Event, err error) bool {</text>
+      <text class="text-code" x="20" y="117">  fmt.Println(event)</text>
+      <text class="text-code" x="20" y="139">  if err != nil {</text>
+      <text class="text-code" x="20" y="161">    return false // break</text>
+      <text class="text-code" x="20" y="183">  }</text>
+      <text class="text-code" x="20" y="205" fill="#f59e0b" font-weight="bold">  return true   // continue</text>
+      <text class="text-code" x="20" y="227" fill="#a78bfa">}</text>
+    </g>
+  </g>
+
+  <!-- Flow Paths -->
+  
+  <!-- Call flow (Left to Right) -->
+  <!-- Left Box 'yield(event, nil)' is at absolute (40 + 20 + 200, 40 + 161) = (260, 201) roughly. Let's start from right edge of Left Box: x=370, y=201 -->
+  <!-- Right Box entry is at x=430, y=135 -->
+  <path class="arrow arrow-call run-flow-call" d="M 370 201 C 400 201, 400 135, 430 135" marker-end="url(#arrowhead-blue)" />
+  
+  <!-- Return flow (Right to Left) -->
+  <!-- Right Box 'return true' is at absolute (430 + 20 + 180, 40 + 205) = (630, 245) or from left edge: x=430, y=245 -->
+  <!-- Left Box return target 'if !yield' is at x=370, y=215 -->
+  <path class="arrow arrow-ret run-flow-ret" d="M 430 245 C 400 245, 400 215, 370 215" marker-end="url(#arrowhead-purple)" />
+
+  <!-- Flow Labels -->
+  <!-- Call Label -->
+  <g transform="translate(365, 140)">
+    <rect fill="#0f172a" stroke="#60a5fa" stroke-width="1" x="-50" y="-10" width="100" height="20" rx="4" />
+    <text x="0" y="4" fill="#60a5fa" font-size="9" text-anchor="middle" font-weight="bold">1. Call Callback</text>
+  </g>
+  
+  <!-- Return Label -->
+  <g transform="translate(435, 270)">
+    <rect fill="#0f172a" stroke="#a78bfa" stroke-width="1" x="-50" y="-10" width="100" height="20" rx="4" />
+    <text x="0" y="4" fill="#a78bfa" font-size="9" text-anchor="middle" font-weight="bold">2. Return True</text>
+  </g>
+</svg>

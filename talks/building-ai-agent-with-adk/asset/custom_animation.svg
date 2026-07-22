@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="100%" height="100%">
+  <defs>
+    <style>
+      text { font-family: monospace; }
+      .box-session { fill: #1e293b; stroke: #38bdf8; stroke-width: 2; rx: 8; }
+      .box-agent { fill: #1e293b; stroke: #f59e0b; stroke-width: 2; rx: 8; }
+      .packet { rx: 4; }
+      
+      @keyframes dashFlow { to { stroke-dashoffset: -16; } }
+
+      /* Custom Event Generator */
+      @keyframes yieldEvent {
+        0%, 15% { transform: translate(400px, 240px); opacity: 0; }
+        20% { transform: translate(400px, 240px); opacity: 1; }
+        50% { transform: translate(400px, 130px); opacity: 1; }
+        55%, 100% { transform: translate(400px, 130px); opacity: 0; }
+      }
+      
+      @keyframes createEvent {
+        0%, 15% { opacity: 0; transform: scale(0.8); }
+        20%, 55% { opacity: 1; transform: scale(1); }
+        60%, 100% { opacity: 0; transform: scale(0.8); }
+      }
+
+      .anim-packet-yield { animation: yieldEvent 3s ease-in-out infinite; }
+      .anim-event-create { animation: createEvent 3s infinite; }
+      .arrow-line { stroke: #475569; stroke-width: 2; stroke-dasharray: 8 8; animation: dashFlow 1s linear infinite; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#475569" />
+    </marker>
+  </defs>
+
+  <rect width="100%" height="100%" fill="#0f172a" />
+
+  <path class="arrow-line" d="M 400 240 L 400 130" marker-end="url(#arrowhead)" />
+  <text x="420" y="190" fill="#94a3b8" font-size="12">yield(event)</text>
+
+  <!-- Session Box -->
+  <g transform="translate(320, 30)">
+    <rect class="box-session" width="160" height="100" />
+    <text x="80" y="35" fill="#f8fafc" font-size="16" text-anchor="middle" font-weight="bold">Session State</text>
+    <text x="80" y="55" fill="#94a3b8" font-size="10" text-anchor="middle">Agent Runner</text>
+  </g>
+
+  <!-- Custom Agent Box -->
+  <g transform="translate(280, 240)">
+    <rect class="box-agent" width="240" height="100" />
+    <text x="120" y="25" fill="#f8fafc" font-size="16" text-anchor="middle" font-weight="bold">func runGreeting()</text>
+    <text x="120" y="45" fill="#f59e0b" font-size="12" text-anchor="middle">Custom Logic (No LLM)</text>
+    
+    <g class="anim-event-create" transform="translate(120, 75)">
+      <rect x="-60" y="-12" width="120" height="24" fill="#334155" rx="4" stroke="#f59e0b" stroke-width="1" />
+      <text x="0" y="3" fill="#f8fafc" font-size="10" text-anchor="middle">NewEvent("...")</text>
+    </g>
+  </g>
+
+  <!-- Packets From -->
+  <g class="anim-packet-yield">
+    <rect class="packet" fill="#f59e0b" width="60" height="20" x="-30" y="-10"/>
+    <text fill="#0f172a" font-size="10" text-anchor="middle" y="3" font-weight="bold">Event</text>
+  </g>
+
+  <text x="400" y="365" fill="#e2e8f0" font-size="16" text-anchor="middle" font-weight="bold">CustomAgent (Manual Control)</text>
+  <text x="400" y="385" fill="#94a3b8" font-size="14" text-anchor="middle">Developer writes logic and explicitly yields events back to ADK Runner</text>
+</svg>
