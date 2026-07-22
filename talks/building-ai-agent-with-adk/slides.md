@@ -850,14 +850,14 @@ color: "#f8fafc"
 # ทำไม Run ต้องคืน `iter.Seq2`
 
 ## ปัญหาที่ต้องแก้
-1. Agent ตัวเดียวอาจส่งได้หลาย event
-2. ต้อง lazy/streaming ไม่รอครบก่อนส่ง
-3. หยุดกลางทางได้ทันที ไม่มี goroutine leak
+1. 1 agent ส่งได้หลาย event
+2. lazy/streaming — ห้ามรอครบก่อนส่ง
+3. หยุดกลางทางได้ทันที ไม่ leak goroutine
 
 ## ทำไมไม่ใช้ slice/channel
-- `[]*Event` ต้องรันจบก่อนถึง return ได้ — ขัด streaming
-- `chan *Event` ต้อง spawn goroutine ทุกชั้นของ agent tree — sync ยุ่ง เสี่ยง leak
-- `iter.Seq2` เป็น **pull-based** — รันบน stack เดียวกัน ไม่ต้อง goroutine เลย
+- `[]*Event` — ต้องรันจบก่อน return ได้ ขัด streaming
+- `chan *Event` — spawn goroutine ทุกชั้น agent tree เสี่ยง leak
+- `iter.Seq2` — **pull-based** stack เดียวกัน ไม่ต้อง goroutine
 
 <!--
 yield return false ส่งสัญญาณหยุดตรงไปถึงบรรทัดถัดไปทันที ไม่ต้องเช็ค ctx.Done() กระจายทั่วโค้ด
@@ -965,7 +965,7 @@ background: "#0f172a"
 color: "#f8fafc"
 ---
 
-# Architecture
+## Architecture
 
 <div class="flex justify-center mt-0 mb-4">
   <img src="./asset/architecture_animation.svg" style="max-height: 420px; width: 100%; object-fit: contain;" />
@@ -992,7 +992,7 @@ background: "#1e293b"
 color: "#f8fafc"
 ---
 
-# Event
+## Event
 
 <div class="flex justify-center my-4">
   <img src="./asset/event_struct_animation.svg" style="max-height: 400px; width: 100%; object-fit: contain;" />
