@@ -34,6 +34,10 @@ jobs:
           go install github.com/gophernment/gophern@latest
           echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
 
+      - name: Setup Chrome for PDF export
+        uses: browser-actions/setup-chrome@v1
+        id: setup-chrome
+
       - name: Build slide decks (HTML + PDF)
         run: bash scripts/build-site.sh
 
