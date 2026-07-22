@@ -38,6 +38,13 @@ jobs:
         uses: browser-actions/setup-chrome@v1
         id: setup-chrome
 
+      - name: Expose Chrome as "google-chrome" on PATH
+        # setup-chrome only provides an output path (its installed binary
+        # name isn't guaranteed to be "chrome"/"google-chrome") — chromedp
+        # (used by `gophern export`) only searches PATH for a fixed list of
+        # names, it doesn't read an output var, so symlink one in.
+        run: sudo ln -s "${{ steps.setup-chrome.outputs.chrome-path }}" /usr/local/bin/google-chrome
+
       - name: Build slide decks (HTML + PDF)
         run: bash scripts/build-site.sh
 
