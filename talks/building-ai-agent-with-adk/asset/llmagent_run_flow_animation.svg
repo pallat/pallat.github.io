@@ -1,0 +1,332 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 850 450" width="100%" height="100%">
+  <defs>
+    <style>
+      text { font-family: monospace; }
+      .box-user { fill: #1e293b; stroke: #94a3b8; stroke-width: 2.5; rx: 8; }
+      .box-runner { fill: #1e293b; stroke: #3b82f6; stroke-width: 2.5; rx: 8; }
+      .box-agent { fill: #1e293b; stroke: #6366f1; stroke-width: 2.5; rx: 8; }
+      .box-llm { fill: #1e293b; stroke: #a855f7; stroke-width: 2.5; rx: 8; }
+      .box-tool { fill: #1e293b; stroke: #06b6d4; stroke-width: 2.5; rx: 8; }
+      
+      .packet { rx: 4; }
+      .packet-yield { rx: 4; fill: #15803d; stroke: #4ade80; stroke-width: 1.5; }
+      .packet-out { rx: 4; fill: #db2777; stroke: #f472b6; stroke-width: 1.5; }
+      
+      @keyframes dashFlow {
+        to { stroke-dashoffset: -20; }
+      }
+
+      /* Packet animations (19.5s total loop) */
+      /* 1. User -> Runner: Trigger Run (0.2s - 1.5s) */
+      @keyframes animUserToRunner {
+        0% { transform: translate(130px, 185px); opacity: 0; }
+        1% { transform: translate(130px, 185px); opacity: 1; }
+        6.5% { transform: translate(195px, 185px); opacity: 1; }
+        7.5%, 100% { transform: translate(195px, 185px); opacity: 0; }
+      }
+
+      /* 2. Runner -> Agent: Context package (1.8s - 3.1s) */
+      @keyframes animCtxToAgent {
+        0%, 8% { transform: translate(295px, 185px); opacity: 0; }
+        9% { transform: translate(295px, 185px); opacity: 1; }
+        15% { transform: translate(400px, 185px); opacity: 1; }
+        16.5%, 100% { transform: translate(400px, 185px); opacity: 0; }
+      }
+
+      /* 3. Prompt packet: Agent -> LLM (3.4s - 4.7s) */
+      @keyframes animAgentToLLM {
+        0%, 16.5% { transform: translate(470px, 175px); opacity: 0; }
+        17.5% { transform: translate(470px, 175px); opacity: 1; }
+        23.5% { transform: translate(660px, 175px); opacity: 1; }
+        25%, 100% { transform: translate(660px, 175px); opacity: 0; }
+      }
+
+      /* 4. Tool Call packet: LLM -> Agent (5.0s - 6.3s) */
+      @keyframes animLLMToAgent {
+        0%, 25% { transform: translate(660px, 215px); opacity: 0; }
+        26% { transform: translate(660px, 215px); opacity: 1; }
+        31.5% { transform: translate(470px, 215px); opacity: 1; }
+        33%, 100% { transform: translate(470px, 215px); opacity: 0; }
+      }
+
+      /* 5. Yield Tool Call packet: Agent -> Runner (6.6s - 7.9s) */
+      @keyframes animYieldToolCall {
+        0%, 33% { transform: translate(400px, 225px); opacity: 0; }
+        34% { transform: translate(400px, 225px); opacity: 1; }
+        39.5% { transform: translate(295px, 225px); opacity: 1; }
+        41%, 100% { transform: translate(295px, 225px); opacity: 0; }
+      }
+
+      /* 6. Call Tool: Agent -> Tool (8.2s - 9.3s) */
+      @keyframes animAgentToTool {
+        0%, 41% { transform: translate(475px, 210px); opacity: 0; }
+        42% { transform: translate(475px, 210px); opacity: 1; }
+        47% { transform: translate(475px, 340px); opacity: 1; }
+        48%, 100% { transform: translate(475px, 340px); opacity: 0; }
+      }
+
+      /* 7. Tool Result: Tool -> Agent (9.6s - 10.7s) */
+      @keyframes animToolToAgent {
+        0%, 48% { transform: translate(445px, 340px); opacity: 0; }
+        49% { transform: translate(445px, 340px); opacity: 1; }
+        54% { transform: translate(445px, 210px); opacity: 1; }
+        55%, 100% { transform: translate(445px, 210px); opacity: 0; }
+      }
+
+      /* 8. Yield Tool Result packet: Agent -> Runner (11.0s - 12.3s) */
+      @keyframes animYieldToolResult {
+        0%, 55% { transform: translate(400px, 225px); opacity: 0; }
+        56% { transform: translate(400px, 225px); opacity: 1; }
+        61.5% { transform: translate(295px, 225px); opacity: 1; }
+        63%, 100% { transform: translate(295px, 225px); opacity: 0; }
+      }
+
+      /* 9. Prompt (with result): Agent -> LLM (12.6s - 13.9s) */
+      @keyframes animAgentToLLM2 {
+        0%, 63% { transform: translate(470px, 175px); opacity: 0; }
+        64% { transform: translate(470px, 175px); opacity: 1; }
+        70% { transform: translate(660px, 175px); opacity: 1; }
+        71.5%, 100% { transform: translate(660px, 175px); opacity: 0; }
+      }
+
+      /* 10. Response: LLM -> Agent (14.2s - 15.5s) */
+      @keyframes animLLMToAgent2 {
+        0%, 71.5% { transform: translate(660px, 215px); opacity: 0; }
+        72.5% { transform: translate(660px, 215px); opacity: 1; }
+        78.5% { transform: translate(470px, 215px); opacity: 1; }
+        80%, 100% { transform: translate(470px, 215px); opacity: 0; }
+      }
+
+      /* 11. Yield Response: Agent -> Runner (15.8s - 17.1s) */
+      @keyframes animYieldResponse {
+        0%, 80% { transform: translate(400px, 225px); opacity: 0; }
+        81% { transform: translate(400px, 225px); opacity: 1; }
+        86.5% { transform: translate(295px, 225px); opacity: 1; }
+        88%, 100% { transform: translate(295px, 225px); opacity: 0; }
+      }
+
+      /* 12. Runner -> User: Final Result to Console (17.4s - 18.7s) */
+      @keyframes animRunnerToUser {
+        0%, 88% { transform: translate(195px, 225px); opacity: 0; }
+        89% { transform: translate(195px, 225px); opacity: 1; }
+        95% { transform: translate(130px, 225px); opacity: 1; }
+        96.5%, 100% { transform: translate(130px, 225px); opacity: 0; }
+      }
+
+      /* Node Blinking */
+      @keyframes blinkUser {
+        0%, 6.5% { filter: brightness(1.3); }
+        7%, 94.5% { filter: brightness(1); }
+        95%, 100% { filter: brightness(1.3); }
+      }
+      @keyframes blinkRunner {
+        0%, 6.5% { filter: brightness(1); }
+        7%, 15% { filter: brightness(1.3); }
+        16%, 39% { filter: brightness(1); }
+        39.5%, 43% { filter: brightness(1.3); }
+        44%, 61% { filter: brightness(1); }
+        61.5%, 65% { filter: brightness(1.3); }
+        66%, 86% { filter: brightness(1); }
+        86.5%, 94.5% { filter: brightness(1.3); }
+        95%, 100% { filter: brightness(1); }
+      }
+      @keyframes blinkAgent {
+        0%, 14% { filter: brightness(1); }
+        15%, 18% { filter: brightness(1.3); }
+        23.5%, 26.5% { filter: brightness(1.3); }
+        31.5%, 34.5% { filter: brightness(1.3); }
+        39.5%, 42.5% { filter: brightness(1.3); }
+        54%, 56.5% { filter: brightness(1.3); }
+        61.5%, 64.5% { filter: brightness(1.3); }
+        70%, 73% { filter: brightness(1.3); }
+        78.5%, 81.5% { filter: brightness(1.3); }
+        86.5%, 90% { filter: brightness(1.3); }
+        91%, 100% { filter: brightness(1); }
+      }
+      @keyframes blinkLLM {
+        0%, 23% { filter: brightness(1); }
+        23.5%, 26.5% { filter: brightness(1.3); }
+        70%, 73% { filter: brightness(1.3); }
+        74%, 100% { filter: brightness(1); }
+      }
+      @keyframes blinkTool {
+        0%, 42% { filter: brightness(1); }
+        43%, 54% { filter: brightness(1.3); }
+        55%, 100% { filter: brightness(1); }
+      }
+
+      /* Apply Animation Classes */
+      .anim-user-runner { animation: animUserToRunner 19.5s ease-in-out infinite; }
+      .anim-ctx-agent { animation: animCtxToAgent 19.5s ease-in-out infinite; }
+      .anim-agent-llm { animation: animAgentToLLM 19.5s ease-in-out infinite; }
+      .anim-llm-agent { animation: animLLMToAgent 19.5s ease-in-out infinite; }
+      .anim-yield-toolcall { animation: animYieldToolCall 19.5s ease-in-out infinite; }
+      .anim-agent-tool { animation: animAgentToTool 19.5s ease-in-out infinite; }
+      .anim-tool-agent { animation: animToolToAgent 19.5s ease-in-out infinite; }
+      .anim-yield-toolresult { animation: animYieldToolResult 19.5s ease-in-out infinite; }
+      .anim-agent-llm2 { animation: animAgentToLLM2 19.5s ease-in-out infinite; }
+      .anim-llm-agent2 { animation: animLLMToAgent2 19.5s ease-in-out infinite; }
+      .anim-yield-response { animation: animYieldResponse 19.5s ease-in-out infinite; }
+      .anim-runner-user { animation: animRunnerToUser 19.5s ease-in-out infinite; }
+
+      .node-user { animation: blinkUser 19.5s infinite; }
+      .node-runner { animation: blinkRunner 19.5s infinite; }
+      .node-agent { animation: blinkAgent 19.5s infinite; }
+      .node-llm { animation: blinkLLM 19.5s infinite; }
+      .node-tool { animation: blinkTool 19.5s infinite; }
+
+      .arrow-line { stroke: #475569; stroke-width: 2; stroke-dasharray: 6 6; animation: dashFlow 0.8s linear infinite; }
+      .arrow-line-yield { stroke: #16a34a; stroke-width: 2; stroke-dasharray: 6 6; animation: dashFlow 0.8s linear infinite; }
+      .arrow-line-out { stroke: #ec4899; stroke-width: 2; stroke-dasharray: 6 6; animation: dashFlow 0.8s linear infinite; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#475569" />
+    </marker>
+    <marker id="arrowhead-yield" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#22c55e" />
+    </marker>
+    <marker id="arrowhead-out" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#f472b6" />
+    </marker>
+  </defs>
+
+  <!-- Background slate -->
+  <rect width="100%" height="100%" fill="#0f172a" />
+
+  <!-- Connector Lines -->
+  <!-- User to Runner -->
+  <path class="arrow-line" d="M 130 185 L 195 185" marker-end="url(#arrowhead)" />
+  <path class="arrow-line-out" d="M 195 225 L 130 225" marker-end="url(#arrowhead-out)" />
+
+  <!-- Runner to LLM Agent -->
+  <path class="arrow-line" d="M 330 185 L 395 185" marker-end="url(#arrowhead)" />
+  <path class="arrow-line-yield" d="M 395 225 L 330 225" marker-end="url(#arrowhead-yield)" />
+
+  <!-- LLM Agent to LLM Model -->
+  <path class="arrow-line" d="M 530 175 L 645 175" marker-end="url(#arrowhead)" />
+  <path class="arrow-line" d="M 650 215 L 530 215" marker-end="url(#arrowhead)" />
+
+  <!-- LLM Agent to Tool -->
+  <path class="arrow-line" d="M 475 265 L 475 305" marker-end="url(#arrowhead)" />
+  <path class="arrow-line" d="M 445 305 L 445 265" marker-end="url(#arrowhead)" />
+
+  <!-- Nodes (Boxes) -->
+  <!-- 0. User / Console -->
+  <g class="node-user" transform="translate(10, 150)">
+    <rect class="box-user" width="120" height="100" />
+    <text x="60" y="30" fill="#f8fafc" font-size="14" text-anchor="middle" font-weight="bold">User / Client</text>
+    <text x="60" y="52" fill="#94a3b8" font-size="9" text-anchor="middle">Console UI / App</text>
+    <text x="60" y="75" fill="#f472b6" font-size="10" text-anchor="middle" font-weight="bold">Prints Event</text>
+  </g>
+
+  <!-- 1. Runner (Flow.Run) -->
+  <g class="node-runner" transform="translate(190, 150)">
+    <rect class="box-runner" width="140" height="100" />
+    <text x="70" y="30" fill="#f8fafc" font-size="15" text-anchor="middle" font-weight="bold">Flow.Run()</text>
+    <text x="70" y="48" fill="#94a3b8" font-size="10" text-anchor="middle">Runner Loop</text>
+    <text x="70" y="66" fill="#3b82f6" font-size="9" text-anchor="middle">calls iterator</text>
+    <text x="70" y="85" fill="#4ade80" font-size="10" text-anchor="middle" font-weight="bold">pulls events ⟲</text>
+  </g>
+
+  <!-- 2. LLM Agent (Wrapper) -->
+  <g class="node-agent" transform="translate(390, 145)">
+    <rect class="box-agent" width="140" height="120" />
+    <text x="70" y="30" fill="#f8fafc" font-size="15" text-anchor="middle" font-weight="bold">LLM Agent</text>
+    <text x="70" y="48" fill="#94a3b8" font-size="9" text-anchor="middle">Agent Core</text>
+    <rect x="12" y="65" width="116" height="40" fill="#1e1b4b" stroke="#6366f1" stroke-width="1.5" rx="4" />
+    <text x="70" y="80" fill="#818cf8" font-size="10" text-anchor="middle" font-weight="bold">yield callback</text>
+    <text x="70" y="95" fill="#cbd5e1" font-size="9" text-anchor="middle">Session State</text>
+  </g>
+
+  <!-- 3. LLM (Model Brain) -->
+  <g class="node-llm" transform="translate(650, 140)">
+    <rect class="box-llm" width="150" height="130" />
+    <text x="75" y="35" fill="#f8fafc" font-size="16" text-anchor="middle" font-weight="bold">LLM (Model)</text>
+    <text x="75" y="55" fill="#a855f7" font-size="11" text-anchor="middle">Gemini / Claude</text>
+    <text x="75" y="85" fill="#cbd5e1" font-size="10" text-anchor="middle">Reasoning Core</text>
+    <text x="75" y="105" fill="#64748b" font-size="9" text-anchor="middle">(Stateless)</text>
+  </g>
+
+  <!-- 4. Tools -->
+  <g class="node-tool" transform="translate(380, 310)">
+    <rect class="box-tool" width="160" height="75" />
+    <text x="80" y="30" fill="#f8fafc" font-size="14" text-anchor="middle" font-weight="bold">Tools Execution</text>
+    <text x="80" y="50" fill="#06b6d4" font-size="10" text-anchor="middle">Local func / API Calls</text>
+  </g>
+
+  <!-- Data Packets Animations -->
+  <!-- 0. User input -->
+  <g class="anim-user-runner">
+    <rect class="packet" fill="#94a3b8" width="55" height="18" x="-27.5" y="-9"/>
+    <text fill="#0f172a" font-size="9" text-anchor="middle" y="3" font-weight="bold">Call Run</text>
+  </g>
+
+  <!-- 1. Context Packet -->
+  <g class="anim-ctx-agent">
+    <rect class="packet" fill="#3b82f6" width="50" height="18" x="-25" y="-9"/>
+    <text fill="#ffffff" font-size="9" text-anchor="middle" y="3" font-weight="bold">Run(ic)</text>
+  </g>
+
+  <!-- 2. Prompt Packet -->
+  <g class="anim-agent-llm">
+    <rect class="packet" fill="#818cf8" width="55" height="18" x="-27.5" y="-9"/>
+    <text fill="#0f172a" font-size="9" text-anchor="middle" y="3" font-weight="bold">Prompt</text>
+  </g>
+
+  <!-- 3. Tool Call Packet -->
+  <g class="anim-llm-agent">
+    <rect class="packet" fill="#a855f7" width="60" height="18" x="-30" y="-9"/>
+    <text fill="#ffffff" font-size="9" text-anchor="middle" y="3" font-weight="bold">Tool Call</text>
+  </g>
+
+  <!-- 4. Yield Tool Call Packet -->
+  <g class="anim-yield-toolcall">
+    <rect class="packet-yield" width="105" height="18" x="-52.5" y="-9"/>
+    <text fill="#ffffff" font-size="9" text-anchor="middle" y="3" font-weight="bold">yield(ToolCall)</text>
+  </g>
+
+  <!-- 5. Call Tool Packet -->
+  <g class="anim-agent-tool">
+    <rect class="packet" fill="#06b6d4" width="60" height="18" x="-30" y="-9"/>
+    <text fill="#0f172a" font-size="9" text-anchor="middle" y="3" font-weight="bold">Call Tool</text>
+  </g>
+
+  <!-- 6. Tool Result Packet -->
+  <g class="anim-tool-agent">
+    <rect class="packet" fill="#06b6d4" width="65" height="18" x="-32.5" y="-9"/>
+    <text fill="#0f172a" font-size="9" text-anchor="middle" y="3" font-weight="bold">Tool Result</text>
+  </g>
+
+  <!-- 7. Yield Tool Result Packet -->
+  <g class="anim-yield-toolresult">
+    <rect class="packet-yield" width="115" height="18" x="-57.5" y="-9"/>
+    <text fill="#ffffff" font-size="9" text-anchor="middle" y="3" font-weight="bold">yield(ToolResult)</text>
+  </g>
+
+  <!-- 8. Prompt + Result Packet -->
+  <g class="anim-agent-llm2">
+    <rect class="packet" fill="#818cf8" width="55" height="18" x="-27.5" y="-9"/>
+    <text fill="#0f172a" font-size="9" text-anchor="middle" y="3" font-weight="bold">Prompt</text>
+  </g>
+
+  <!-- 9. Response Packet -->
+  <g class="anim-llm-agent2">
+    <rect class="packet" fill="#a855f7" width="60" height="18" x="-30" y="-9"/>
+    <text fill="#ffffff" font-size="9" text-anchor="middle" y="3" font-weight="bold">Response</text>
+  </g>
+
+  <!-- 10. Yield Response Packet -->
+  <g class="anim-yield-response">
+    <rect class="packet-yield" width="105" height="18" x="-52.5" y="-9"/>
+    <text fill="#ffffff" font-size="9" text-anchor="middle" y="3" font-weight="bold">yield(Response)</text>
+  </g>
+
+  <!-- 11. Final Output to User -->
+  <g class="anim-runner-user">
+    <rect class="packet-out" width="65" height="18" x="-32.5" y="-9"/>
+    <text fill="#ffffff" font-size="9" text-anchor="middle" y="3" font-weight="bold">Output</text>
+  </g>
+
+  <!-- Title / Legend -->
+  <text x="425" y="420" fill="#e2e8f0" font-size="16" text-anchor="middle" font-weight="bold">Flow.Run() with yield(Event) Loop Execution</text>
+</svg>

@@ -405,28 +405,6 @@ color: "#f8fafc"
 
 # Agent Type 1: LLM Agent (สมอง)
 
-- ตัวเดียวที่ "คิดเอง" — ใช้ LLM ตัดสินใจว่าจะทำอะไรต่อ ไม่ hardcode flow
-- ประกอบด้วย: instruction, tools, callbacks, sub-agents (delegation), input/output schema
-- LLM เลือกเองว่าจะเรียก tool ไหน กี่ครั้ง จบเมื่อไหร่
-
-**เหมาะกับ:** งานที่ requirement ไม่ตายตัว ต้องการ reasoning
-
-<!--
-ตอบคำถาม วางแผนงาน สรุปข้อมูล — พวกนี้คือ use case ของ LLM Agent
-
-รายการบน slide ตรงกับ field จริงใน llmagent.Config (verify กับ v2.0.0 แล้ว): Instruction/InstructionProvider, Tools/Toolsets, callbacks 8 ชนิด, SubAgents, InputSchema/OutputSchema, OutputKey
-ระวัง: อย่าพูดถึง "planner" กับ "code execution" — สองอันนั้นเป็น feature ของ ADK **Python** ยังไม่มีใน Go v2 (grep ทั้ง package แล้วไม่มี CodeExecutor เลย) ถ้าโดนถามตอบตรงๆ ว่า Go version ยังไม่มี ต้องทำเองผ่าน tool/Custom Agent
-SubAgents บน LLM Agent คือกลไก delegation — LLM ตัดสินใจ transfer งานให้ sub-agent ได้เอง (ปิดได้ด้วย DisallowTransferToParent/DisallowTransferToPeers)
--->
-
----
-layout: "default"
-background: "#0f172a"
-color: "#f8fafc"
----
-
-# Tools Lifecycle — ทำงานยังไง?
-
 <div class="flex justify-center my-4">
   <img src="./asset/tools_animation.svg" style="max-height: 380px; width: 100%; object-fit: contain;" />
 </div>
@@ -434,6 +412,18 @@ color: "#f8fafc"
 <div class="text-sm text-gray-400 text-center mt-2">
   1. เราเขียนฟังก์ชัน → 2. โยนเข้า Context → 3. LLM เรียก Tool → 4. ผลลัพธ์ส่งกลับไปที่ LLM
 </div>
+
+<!--
+ตัวเดียวที่ "คิดเอง" — ใช้ LLM ตัดสินใจว่าจะทำอะไรต่อ ไม่ hardcode flow, เลือกเองว่าจะเรียก tool ไหน กี่ครั้ง จบเมื่อไหร่
+ประกอบด้วย: instruction, tools, callbacks, sub-agents (delegation), input/output schema
+เหมาะกับ: งานที่ requirement ไม่ตายตัว ต้องการ reasoning
+
+ตอบคำถาม วางแผนงาน สรุปข้อมูล — พวกนี้คือ use case ของ LLM Agent
+
+รายการข้างบนตรงกับ field จริงใน llmagent.Config (verify กับ v2.0.0 แล้ว): Instruction/InstructionProvider, Tools/Toolsets, callbacks 8 ชนิด, SubAgents, InputSchema/OutputSchema, OutputKey
+ระวัง: อย่าพูดถึง "planner" กับ "code execution" — สองอันนั้นเป็น feature ของ ADK **Python** ยังไม่มีใน Go v2 (grep ทั้ง package แล้วไม่มี CodeExecutor เลย) ถ้าโดนถามตอบตรงๆ ว่า Go version ยังไม่มี ต้องทำเองผ่าน tool/Custom Agent
+SubAgents บน LLM Agent คือกลไก delegation — LLM ตัดสินใจ transfer งานให้ sub-agent ได้เอง (ปิดได้ด้วย DisallowTransferToParent/DisallowTransferToPeers)
+-->
 
 ---
 
@@ -723,18 +713,20 @@ background: "#0f172a"
 color: "#f8fafc"
 ---
 
-# Agent Type 3: Custom Agent (ผู้เชี่ยวชาญ)
+## Agent Type 3: Custom Agent
 
-สร้างผ่าน `agent.New(agent.Config{Run: ...})` — เขียน `Run()` logic เองเต็มที่
-ไม่ผูก pattern สำเร็จรูป (ไม่มี `BaseAgent` struct ให้ embed)
+<div class="flex justify-center my-4">
+  <img src="./asset/custom_animation.svg" style="max-height: 380px; width: 100%; object-fit: contain;" />
+</div>
 
-**ใช้เมื่อ:**
-- ต้องการ deterministic step ผสมกับ LLM step (validate, format, call internal API)
-- ประหยัด cost + latency — ไม่ต้อง call LLM ทุก step
-- Integrate ระบบเดิม (legacy) เข้ามาอยู่ใน agent tree เดียวกัน
-- Custom control flow ที่ Sequential/Parallel/Loop ไม่พอ
+<div class="text-sm text-gray-400 text-center mt-2">
+  เราเขียน Go function ธรรมดา และสั่ง `yield(event)` เพื่อส่งค่า Event ให้ ADK Runner ทีละตัว
+</div>
 
 <!--
+สร้างผ่าน agent.New(agent.Config{Run: ...}) — เขียน Run() logic เองเต็มที่ ไม่ผูก pattern สำเร็จรูป (ไม่มี BaseAgent struct ให้ embed)
+ใช้เมื่อ: ต้องการ deterministic step ผสมกับ LLM step (validate/format/call internal API), ประหยัด cost+latency (ไม่ต้อง call LLM ทุก step), integrate ระบบ legacy เข้า agent tree เดียวกัน, custom control flow ที่ Sequential/Parallel/Loop ไม่พอ
+
 Custom Agent คือช่องให้ "หลุดจาก LLM" ตรงไหนก็ได้ในระบบ agent
 ในสถานการณ์จริงมักไม่ยืนเดี่ยว แต่เป็น sub-agent แทรกอยู่ใน pipeline ที่มี LlmAgent ล้อมอยู่
 interface agent.Agent มี unexported method บังคับ — implement ตรงๆ ไม่ได้ ต้องผ่าน agent.New เท่านั้น
@@ -746,22 +738,6 @@ interface agent.Agent มี unexported method บังคับ — implement 
 - ผูกกับ LLM จริง: เฉพาะ LLM Agent type (wrap model.LLM), instructions/planner, tool schema generation
 พูดง่ายๆ: เรียก ADK ว่า "AI Agent framework" เพราะ use case ส่วนใหญ่มี LLM Agent อยู่ใน tree แต่ตัว infrastructure เองเป็น general multi-agent orchestration (เทียบ Temporal/Akka ตามที่พูดไว้ตอน slide Architecture) ไม่ได้บังคับว่าทุก node ต้องมี AI/LLM
 -->
-
----
-layout: "default"
-background: "#1e293b"
-color: "#f8fafc"
----
-
-# CustomAgent — ทำงานยังไง?
-
-<div class="flex justify-center my-4">
-  <img src="./asset/custom_animation.svg" style="max-height: 380px; width: 100%; object-fit: contain;" />
-</div>
-
-<div class="text-sm text-gray-400 text-center mt-2">
-  เราเขียน Go function ธรรมดา และสั่ง `yield(event)` เพื่อส่งค่า Event ให้ ADK Runner ทีละตัว
-</div>
 
 ---
 
@@ -959,6 +935,28 @@ color: "#f8fafc"
    - ค่าควบคุมจะไหลย้อนข้ามสะพาน (เส้นสีม่วง) กลับมาฝั่งซ้าย เพื่อสั่งให้ฝั่งซ้ายทำรอบถัดไป
 
 ถ้าหากฝั่งขวาพบ error และส่ง `return false` กลับไป ฝั่งซ้ายจะเจอ `if !yield(...)` เป็นจริง แล้วทำคำสั่ง `return` เพื่อปิดฟังก์ชันและจบการทำงานทั้งหมดทันทีโดยไม่มี Goroutine Leak
+-->
+
+---
+layout: "default"
+background: "#0f172a"
+color: "#f8fafc"
+---
+
+## LLM Agent — Flow.Run() ทำงานยังไง?
+
+<div class="flex justify-center h-[380px] w-full">
+  <img src="./asset/llmagent_run_flow_animation.svg" style="height: 100%; width: 100%; object-fit: contain;" />
+</div>
+
+<!--
+จุดเด่นคือเมื่อเรียก Flow.Run() ตัว Runner จะเข้าสู่ลูปการทำงานกับ LLM Agent:
+1. Runner ส่ง Invocation Context (ic) บัญชีประวัติและตัวแปรของ Session
+2. Agent นำข้อมูลแปลงเป็น Prompt ส่งต่อให้ LLM Model (Gemini/Claude)
+3. LLM วิเคราะห์หากต้องการข้อมูลเสริม จะส่งสัญญาณสั่ง Tool Call ออกมา
+4. Agent รันฟังก์ชันเครื่องมือ (Tools) ในโค้ด Go ตัวเองทันที
+5. นำผลลัพธ์ (Tool Result) แปะใส่ Session context ย้อนกลับไปให้ LLM คิดต่อ
+6. ทำซ้ำจนกว่า LLM จะพอใจ และส่งผลลัพธ์สุดท้ายกลับออกไปที่ Runner
 -->
 
 ---
