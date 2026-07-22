@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # Builds public/ from every talks/<name>/slides.md: a static HTML view
-# (gophern html) and a downloadable PDF (gophern export) per talk, plus a
-# root index.html that embeds the most recently changed talk (by git log)
-# front and center, with every talk (including that one) listed below with
-# view/download links. Requires `gophern` on PATH and full git history
-# (fetch-depth: 0) so `git log` can date each talks/<name>/ directory.
+# (gophern html) per talk, plus a root index.html that embeds the most
+# recently changed talk (by git log) front and center, with every talk
+# (including that one) listed below. Requires `gophern` on PATH and full
+# git history (fetch-depth: 0) so `git log` can date each talks/<name>/
+# directory.
 set -euo pipefail
 
 if ! command -v gophern >/dev/null 2>&1; then
@@ -34,7 +34,6 @@ for dir in talks/*/; do
 
   echo "Building talk: $name"
   gophern html -o "$outdir/index.html" "$slides"
-  gophern export -o "$outdir/presentation.pdf" "$slides"
 
   if [ -d "${dir}asset" ]; then
     cp -r "${dir}asset" "$outdir/asset"
@@ -83,7 +82,7 @@ for i in "${order[@]}"; do
   if [ "$n" = "$latest_name" ]; then
     suffix=" (latest)"
   fi
-  list_items="${list_items}    <li><a href=\"talks/${n}/\">${t}</a>${suffix} — <a href=\"talks/${n}/presentation.pdf\">PDF</a></li>\n"
+  list_items="${list_items}    <li><a href=\"talks/${n}/\">${t}</a>${suffix}</li>\n"
 done
 
 cat > public/index.html <<HTML
@@ -103,7 +102,6 @@ cat > public/index.html <<HTML
 </head>
 <body>
 <iframe src="talks/${latest_name}/" title="${latest_title}"></iframe>
-<p><a href="talks/${latest_name}/presentation.pdf">Download this talk as PDF</a></p>
 
 <h2>All talks</h2>
 <ul>
