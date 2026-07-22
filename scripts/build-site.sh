@@ -7,6 +7,11 @@
 # (fetch-depth: 0) so `git log` can date each talks/<name>/ directory.
 set -euo pipefail
 
+if ! command -v gophern >/dev/null 2>&1; then
+  echo "Error: gophern not found on PATH. Install it first (go install github.com/gophernment/gophern@latest) and make sure \$(go env GOPATH)/bin is on PATH." >&2
+  exit 1
+fi
+
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
 

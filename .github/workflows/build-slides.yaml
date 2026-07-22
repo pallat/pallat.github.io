@@ -30,7 +30,9 @@ jobs:
           go-version: 'stable'
 
       - name: Install gophern
-        run: go install github.com/gophernment/gophern@latest
+        run: |
+          go install github.com/gophernment/gophern@latest
+          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
 
       - name: Build slide decks (HTML + PDF)
         run: bash scripts/build-site.sh
